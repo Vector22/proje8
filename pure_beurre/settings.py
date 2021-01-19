@@ -33,7 +33,7 @@ else:
     DEBUG = True
 
 # ALLOWED_HOSTS = ['vector-pure-beurre.herokuapp.com', '127.0.0.1', '0.0.0.0']
-ALLOWED_HOSTS = ['ulrichy-pure-beurre.herokuapp.com', '127.0.0.1', 'localhost', '0.0.0.0']
+ALLOWED_HOSTS = ['ulrich-pure-beurre.herokuapp.com', '127.0.0.1', 'localhost', '0.0.0.0']
 
 # Application definition
 
