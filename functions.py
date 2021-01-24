@@ -21,7 +21,7 @@ def present(cle, table):
 
 def fill_table(maxFoodCat, maxFoodPage):
     """
-    This function download food and inserting it into
+    This function download food and insert them into
     the local database
     Parameter: maxFoodCat = maximum food categories wished
                maxFoodPage = maximum categories food page wished
