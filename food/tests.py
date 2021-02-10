@@ -146,7 +146,7 @@ class ViewsTest(TestCase):
         self.user = User.objects.create(username="Ben-Ben",
                                         email="benoit.prieur@protonmail.com",
                                         first_name="Benoit")
-        self.user.set_password('B3nB3n256')
+        self.user.set_password('B3nB3n256*')
         self.user.save()
 
         self.homeUrl = reverse('home')
@@ -194,7 +194,7 @@ class ViewsTest(TestCase):
 
         # attempt to log the client
         user_login = self.client.login(username="Ben-Ben",
-                                       password="B3nB3n256")
+                                       password="B3nB3n256*")
         response = self.client.get(self.homeUrl)
 
         self.assertTrue(user_login)
@@ -249,63 +249,63 @@ class ViewsTest(TestCase):
 
 
 # Test with selenium
-class AccountTestCase(LiveServerTestCase):
-    def setUp(self):
-        self.selenium = webdriver.Firefox(
-            executable_path=GeckoDriverManager().install())
-        super(AccountTestCase, self).setUp()
+# class AccountTestCase(LiveServerTestCase):
+#     def setUp(self):
+#         self.selenium = webdriver.Firefox(
+#             executable_path=GeckoDriverManager().install())
+#         super(AccountTestCase, self).setUp()
 
-    def tearDown(self):
-        self.selenium.quit()
-        super(AccountTestCase, self).tearDown()
+#     def tearDown(self):
+#         self.selenium.quit()
+#         super(AccountTestCase, self).tearDown()
 
-    def test_register(self):
-        selenium = self.selenium
-        # Opening the link we want to test
-        selenium.get('http://127.0.0.1:8000/signup/')
-        # Find the form element
-        username = selenium.find_element_by_id('id_username')
-        first_name = selenium.find_element_by_id('id_first_name')
-        last_name = selenium.find_element_by_id('id_last_name')
-        email = selenium.find_element_by_id('id_email')
-        password1 = selenium.find_element_by_id('id_password1')
-        password2 = selenium.find_element_by_id('id_password2')
+#     def test_register(self):
+#         selenium = self.selenium
+#         # Opening the link we want to test
+#         selenium.get('http://127.0.0.1:8000/signup/')
+#         # Find the form element
+#         username = selenium.find_element_by_id('id_username')
+#         first_name = selenium.find_element_by_id('id_first_name')
+#         last_name = selenium.find_element_by_id('id_last_name')
+#         email = selenium.find_element_by_id('id_email')
+#         password1 = selenium.find_element_by_id('id_password1')
+#         password2 = selenium.find_element_by_id('id_password2')
 
-        submit = selenium.find_element_by_name('submit')
+#         submit = selenium.find_element_by_name('submit')
 
-        print(submit)
+#         print(submit)
 
-        # Fill the form with data
-        first_name.send_keys('ulrich')
-        last_name.send_keys('ulrich')
-        username.send_keys('vector22')
-        email.send_keys('ulrich@gmail.com')
-        password1.send_keys('R3k1nV3ct0r**')
-        password2.send_keys('R3k1nV3ct0r**')
+#         # Fill the form with data
+#         first_name.send_keys('ulrich')
+#         last_name.send_keys('ulrich')
+#         username.send_keys('vector22')
+#         email.send_keys('ulrich@gmail.com')
+#         password1.send_keys('R3k1nV3ct0r**')
+#         password2.send_keys('R3k1nV3ct0r**')
 
-        # Submitting the form
-        submit.send_keys(Keys.RETURN)
+#         # Submitting the form
+#         submit.send_keys(Keys.RETURN)
 
-        # Check the returned result
-        textTab = [
-            'Nom d\'utilisateur', 'First name', 'Last name', 'Email',
-            'Mot de passe', 'Confirmation du mot de passe'
-        ]
+#         # Check the returned result
+#         textTab = [
+#             'Nom d\'utilisateur', 'First name', 'Last name', 'Email',
+#             'Mot de passe', 'Confirmation du mot de passe'
+#         ]
 
-        # assert the presence of some wignets label
-        for text in textTab:
-            assert text in selenium.page_source
+#         # assert the presence of some wignets label
+#         for text in textTab:
+#             assert text in selenium.page_source
 
-    def test_result(self):
-        selenium = self.selenium
-        # Opening the link we want to test
-        selenium.get('http://127.0.0.1:8000/result/chocolat')
+#     def test_result(self):
+#         selenium = self.selenium
+#         # Opening the link we want to test
+#         selenium.get('http://127.0.0.1:8000/result/chocolat')
 
-        # Assert the presence of some chocolat in the food list displayed
-        foodName = [
-            'Krispees quinoa amaranth', 'NESQUIK Barres de Céréales',
-            'Zero cookie chocolate brownie flavour'
-        ]
+#         # Assert the presence of some chocolat in the food list displayed
+#         foodName = [
+#             'Krispees quinoa amaranth', 'NESQUIK Barres de Céréales',
+#             'Zero cookie chocolate brownie flavour'
+#         ]
 
-        for name in foodName:
-            assert name in selenium.page_source
+#         for name in foodName:
+#             assert name in selenium.page_source
