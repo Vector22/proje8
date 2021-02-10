@@ -1,12 +1,14 @@
 from django.contrib.auth import login, authenticate, logout
 from django.views.generic import DetailView
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from .forms import SignUpForm, ResearchForm
-from .models import Food, MyFood
+from .forms import SignUpForm, ResearchForm, UserEditForm, ProfileEditForm
+from .models import Food, MyFood, Profile
 
 from random import randrange
 
@@ -111,7 +113,7 @@ class FoodDetail(DetailView):
     context_object_name = 'food'
 
 
-class UserDetail(DetailView):
+class UserDetail(LoginRequiredMixin, DetailView):
     model = User
     template_name = 'food/user_details.html'
     context_object_name = 'user'
@@ -121,7 +123,11 @@ def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
+            new_user = form.save()
+
+            # Create the user profile
+            Profile.objects.create(user=new_user)
+
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
@@ -130,6 +136,29 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, 'food/registration/signup.html', {'form': form})
+
+
+# User profile
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        user_form = UserEditForm(instance=request.user, data=request.POST)
+        profile_form = ProfileEditForm(instance=request.user.profile,
+                                       data=request.POST,
+                                       files=request.FILES)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+
+    else:
+        user_form = UserEditForm(instance=request.user)
+        profile_form = ProfileEditForm(instance=request.user.profile)
+
+    return render(request, 'food/registration/edit_profile.html', {
+        'user_form': user_form,
+        'profile_form': profile_form
+    })
 
 
 def log_out(request):

@@ -10,29 +10,38 @@
 		width: auto;
 		height: 300px;
 	}
+
 	h1 {
 		font-size: 120px;
 		color: rgba(225, 225, 225, 0.2);
 	}
+
 	h3 {
 		text-align: center;
 	}
+
 	.email {
 		background-color: #FFF;
 		color: rgba(36, 142, 184, 0.7);
 		border-radius: 5px/5px;
 		padding: 8px;
 	}
+
+	.profile_link {
+		color: aqua !important;
+		font-weight: 600;
+		font-size: medium;
+	}
 </style>
 <header>
-		<div class="container">
-			<div class="row username">
-				<h1 class="col-lg-12 col-md-12">
-					{{ user.username }}
-				</h1>
-			</div>
-			
+	<div class="container">
+		<div class="row username">
+			<h1 class="col-lg-12 col-md-12">
+				{{ user.username }}
+			</h1>
 		</div>
+
+	</div>
 </header>
 {% endblock %}
 
@@ -43,6 +52,7 @@
 			<h3><span class="email">{{ user.email }}</span></h3>
 		</div>
 	</div>
-	
+	<p><a href="{% url 'edit_profile' %}" class="profile_link">Edit your profile</a></p>
+
 </section>
 {% endblock %}

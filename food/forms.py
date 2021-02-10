@@ -3,13 +3,17 @@ from django.utils import html
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
+from .models import Profile
+
 
 class SignUpForm(UserCreationForm):
     """ This class extend the UserCreationForm """
 
-    first_name = forms.CharField(max_length=30, required=False,
+    first_name = forms.CharField(max_length=30,
+                                 required=False,
                                  help_text='Optional.')
-    last_name = forms.CharField(max_length=30, required=False,
+    last_name = forms.CharField(max_length=30,
+                                required=False,
                                 help_text='Optional.')
     email = forms.EmailField(max_length=254,
                              help_text='Required. Enter a valid email\
@@ -17,8 +21,15 @@ class SignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email',
-                  'password1', 'password2', )
+        fields = (
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'password1',
+            'password2',
+        )
+
 
 """
 Form field for displaying a submit button.
@@ -57,12 +68,12 @@ class SubmitButtonField(forms.Field):
 class ResearchForm(forms.Form):
     """ The main page and menu research form """
 
-    search = forms.CharField(max_length=254,
-                             widget=forms.TextInput(
-                                 attrs={
-                                     'class': 'input form-control',
-                                     'placeholder': 'Recherche'
-                                 }))
+    search = forms.CharField(
+        max_length=254,
+        widget=forms.TextInput(attrs={
+            'class': 'input form-control',
+            'placeholder': 'Recherche'
+        }))
     button = SubmitButtonField(label="", initial=u" Chercher")
 
     def clean(self):
@@ -72,3 +83,16 @@ class ResearchForm(forms.Form):
         if not search:
             raise forms.ValidationError('You have to write something to\
                                         research !')
+
+
+# User profile form
+class UserEditForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email')
+
+
+class ProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('date_of_birth', 'photo')

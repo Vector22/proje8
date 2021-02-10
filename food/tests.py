@@ -143,10 +143,10 @@ class ResearchFormTest(TestCase):
 class ViewsTest(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create(username="Stephane",
-                                        email="user@mp.com",
-                                        first_name="Stephane")
-        self.user.set_password('St3ph4n3')
+        self.user = User.objects.create(username="Ben-Ben",
+                                        email="benoit.prieur@protonmail.com",
+                                        first_name="Benoit")
+        self.user.set_password('B3nB3n256')
         self.user.save()
 
         self.homeUrl = reverse('home')
@@ -189,17 +189,17 @@ class ViewsTest(TestCase):
         # Check that the next redirection page is correct
         self.assertRedirects(response, '/accounts/login/?next=/myFoods/')
 
-    def test_signup_view(self):
+    def test_signin_view(self):
         """ Verify if a user can logged in """
 
         # attempt to log the client
-        user_login = self.client.login(username="Stephane",
-                                       password="St3ph4n3")
+        user_login = self.client.login(username="Ben-Ben",
+                                       password="B3nB3n256")
         response = self.client.get(self.homeUrl)
 
         self.assertTrue(user_login)
         # Verify the password
-        self.assertTrue(self.user.check_password("St3ph4n3"))
+        self.assertTrue(self.user.check_password("B3nB3n256*"))
         # Check if the correct template is used to render the response
         self.assertTemplateUsed(response, 'food/index.html')
 
@@ -219,7 +219,7 @@ class ViewsTest(TestCase):
         self.assertTemplateNotUsed(response, 'food/result.html')
 
     def test_myFoods_view(self):
-        self.client.login(username="Stephane", password="St3ph4n3")
+        self.client.login(username="Ben-Ben", password="B3nB3n256*")
         response = self.client.get(self.myFoodsUrl)
         self.assertTemplateUsed(response, 'food/my_foods.html')
 
@@ -236,7 +236,7 @@ class ViewsTest(TestCase):
         self.assertEqual(response.context['object'], self.food)
 
     def test_userDetail_view(self):
-        self.client.login(username="Stephane", password="St3ph4n3")
+        self.client.login(username="Ben-Ben", password="B3nB3n256*")
         userDetailUrl = reverse('user_detail', args=(self.user.id, ))
         response = self.client.get(userDetailUrl)
         self.assertEqual(response.status_code, 200)
@@ -297,7 +297,6 @@ class AccountTestCase(LiveServerTestCase):
             assert text in selenium.page_source
 
     def test_result(self):
-        # <h4 class="food-box__name">Zero cookie chocolate brownie flavour</h4>
         selenium = self.selenium
         # Opening the link we want to test
         selenium.get('http://127.0.0.1:8000/result/chocolat')
